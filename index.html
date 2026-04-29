@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>May 2026 — Daily Routine</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #08080e; --surface: #111118; --card: #16161f; --border: #252535;
+    --accent: #d4ff47; --accent2: #47ffe0; --accent3: #ff6b6b; --accent4: #b47fff;
+    --text: #eeeeee; --muted: #55556a; --done-bg: #162216; --done-border: #4aee20;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
+  body::after { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,255,71,0.06) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+  .wrap { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 36px 20px 100px; }
+  header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; flex-wrap: wrap; gap: 24px; }
+  .brand h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 12vw, 110px); line-height: 0.88; color: var(--accent); letter-spacing: 3px; }
+  .brand p { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; }
+  .month-stats { display: flex; gap: 28px; padding-bottom: 8px; }
+  .stat { text-align: right; }
+  .stat-n { font-family: 'Bebas Neue', sans-serif; font-size: 42px; line-height: 1; display: block; }
+  .stat-n.s1 { color: var(--accent); } .stat-n.s2 { color: var(--accent2); } .stat-n.s3 { color: var(--accent4); }
+  .stat-l { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
+  .month-progress { margin-bottom: 36px; }
+  .prog-label { display: flex; justify-content: space-between; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .prog-track { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .prog-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 99px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
+  .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .cal-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; color: var(--text); }
+  .weekday-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 4px; }
+  .wd { text-align: center; font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; padding: 4px 0; }
+  .day-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 44px; }
+  .day-cell { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); cursor: pointer; transition: all 0.15s; position: relative; gap: 2px; }
+  .day-cell.empty { background: transparent; border-color: transparent; cursor: default; }
+  .day-cell:not(.empty):hover { border-color: var(--accent); transform: scale(1.06); z-index: 2; }
+  .day-cell.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 20px rgba(212,255,71,0.35); }
+  .day-cell.active .dn { color: #080808; } .day-cell.active .dp { background: #080808; }
+  .day-cell.full-done { background: var(--done-bg); border-color: var(--done-border); }
+  .day-cell.partial { border-color: var(--accent2); }
+  .dn { font-family: 'Bebas Neue', sans-serif; font-size: clamp(14px, 2.5vw, 20px); color: var(--text); line-height: 1; }
+  .dp { width: 4px; height: 4px; border-radius: 50%; background: var(--accent2); opacity: 0; transition: opacity 0.2s; }
+  .day-cell.partial .dp { opacity: 1; } .day-cell.full-done .dp { opacity: 1; background: var(--done-border); }
+  .date-panel { margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .date-label { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--text); letter-spacing: 2px; }
+  .date-label span { color: var(--accent); }
+  .day-progress-text { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--accent2); letter-spacing: 1px; }
+  .sec { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 3px; margin: 28px 0 12px; display: flex; align-items: center; gap: 10px; }
+  .sec::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .task-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 8px; }
+  .task { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all 0.18s cubic-bezier(.4,0,.2,1); user-select: none; position: relative; overflow: hidden; }
+  .task::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--muted); transition: background 0.2s; }
+  .task:hover { border-color: rgba(212,255,71,0.4); transform: translateX(4px); }
+  .task.done { background: var(--done-bg); border-color: var(--done-border); }
+  .task.done::before { background: var(--done-border) !important; }
+  .task[data-cat="fitness"]::before { background: var(--accent3); }
+  .task[data-cat="study"]::before { background: var(--accent2); }
+  .task[data-cat="language"]::before { background: var(--accent4); }
+  .task[data-cat="interview"]::before { background: #ffaa47; }
+  .task[data-cat="wellness"]::before { background: #ff8fa3; }
+  .task[data-cat="hygiene"]::before { background: #7fe8ff; }
+  .checkbox { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.18s; }
+  .task.done .checkbox { background: var(--done-border); border-color: var(--done-border); }
+  .checkmark { opacity: 0; transform: scale(0); transition: all 0.15s cubic-bezier(.4,0,.2,1); color: #080808; font-size: 13px; font-weight: 700; }
+  .task.done .checkmark { opacity: 1; transform: scale(1); }
+  .task-info { flex: 1; }
+  .task-time { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-bottom: 2px; }
+  .task-name { font-size: 14px; font-weight: 500; color: var(--text); transition: color 0.18s; }
+  .task.done .task-name { color: var(--done-border); text-decoration: line-through; text-decoration-color: rgba(74,238,32,0.4); }
+  .task-dur { font-size: 11px; color: var(--muted); font-style: italic; }
+  .task-icon { font-size: 20px; flex-shrink: 0; }
+  .reset-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 32px; background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 10px 18px; border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+  .reset-btn:hover { border-color: var(--accent3); color: var(--accent3); }
+  .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--accent); color: #080808; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; padding: 12px 24px; border-radius: 99px; transition: transform 0.3s cubic-bezier(.4,0,.2,1); z-index: 100; white-space: nowrap; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  @media (max-width: 600px) { .month-stats { gap: 16px; } .stat-n { font-size: 30px; } .task-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><h1>MAY<br>2026</h1><p>Daily Routine Tracker</p></div>
+    <div class="month-stats">
+      <div class="stat"><span class="stat-n s1" id="totalDone">0</span><div class="stat-l">Tasks Done</div></div>
+      <div class="stat"><span class="stat-n s2" id="daysActive">0</span><div class="stat-l">Days Active</div></div>
+      <div class="stat"><span class="stat-n s3" id="streak">0</span><div class="stat-l">Day Streak</div></div>
+    </div>
+  </header>
+  <div class="month-progress">
+    <div class="prog-label"><span>Month Progress</span><span id="progPct">0%</span></div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+  <div class="cal-header"><div class="cal-title">MAY 2026</div></div>
+  <div class="weekday-row">
+    <div class="wd">Sun</div><div class="wd">Mon</div><div class="wd">Tue</div>
+    <div class="wd">Wed</div><div class="wd">Thu</div><div class="wd">Fri</div><div class="wd">Sat</div>
+  </div>
+  <div class="day-grid" id="dayGrid"></div>
+  <div class="date-panel">
+    <div class="date-label">&#8212; <span id="selDateLabel">Select a day</span></div>
+    <div class="day-progress-text" id="dayProgText"></div>
+  </div>
+  <div id="taskArea"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const TASKS=[
+  {id:'skincare_am',time:'9:30 AM',name:'Morning Skincare',dur:'5 min x 3',icon:'&#129396;',cat:'wellness'},
+  {id:'jaw_am',time:'9:30 AM',name:'Jawline Exercise',dur:'15 min',icon:'&#128170;',cat:'wellness'},
+  {id:'japanese',time:'9:45 AM',name:'Japanese Study',dur:'30 min',icon:'&#127471;&#127477;',cat:'language'},
+  {id:'kubernetes',time:'10:15 AM',name:'Kubernetes',dur:'1.5 hr',icon:'&#9784;',cat:'study'},
+  {id:'terraform',time:'11:45 AM',name:'Terraform',dur:'30 min',icon:'&#127959;',cat:'study'},
+  {id:'azure',time:'12:15 PM',name:'Azure',dur:'1 hr',icon:'&#9729;',cat:'study'},
+  {id:'bath',time:'1:15 PM',name:'Daily Bath',dur:'&mdash;',icon:'&#128703;',cat:'hygiene'},
+  {id:'gym',time:'6:00 PM',name:'Gym',dur:'1 hr',icon:'&#127947;',cat:'fitness'},
+  {id:'walk',time:'7:00 PM',name:'Evening Walk',dur:'30 min',icon:'&#128694;',cat:'fitness'},
+  {id:'skincare_pm',time:'9:00 PM',name:'Night Skincare',dur:'5 min x 3',icon:'&#127769;',cat:'wellness'},
+  {id:'jaw_pm',time:'9:00 PM',name:'Jawline Exercise (Night)',dur:'15 min',icon:'&#128170;',cat:'wellness'},
+  {id:'interview',time:'9:15 PM',name:'Interview Prep',dur:'1 hr',icon:'&#127919;',cat:'interview'},
+  {id:'casestudy',time:'10:15 PM',name:'Case Study',dur:'1 hr',icon:'&#128218;',cat:'interview'},
+  {id:'mocktest',time:'11:15 PM',name:'Mock Test',dur:'1 hr',icon:'&#128221;',cat:'interview'},
+];
+const SECTIONS=[
+  {label:'Morning &mdash; 9:30 AM',ids:['skincare_am','jaw_am','japanese']},
+  {label:'Study Block &mdash; 10:15 AM',ids:['kubernetes','terraform','azure']},
+  {label:'Afternoon &mdash; 1:15 PM',ids:['bath']},
+  {label:'Evening Fitness &mdash; 6:00 PM',ids:['gym','walk']},
+  {label:'Night &mdash; 9:00 PM',ids:['skincare_pm','jaw_pm','interview','casestudy','mocktest']},
+];
+const MAY_START_DOW=5,MAY_DAYS=31,STORAGE_KEY='may2026_routine_v2';
+let data={},selectedDay=null;
+function load(){try{data=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}')}catch{data={}}}
+function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}
+function getDayData(d){if(!data[d])data[d]={};return data[d]}
+function dayDoneCount(d){const dd=data[d]||{};return TASKS.filter(t=>dd[t.id]).length}
+function isDayComplete(d){return dayDoneCount(d)===TASKS.length}
+function isDayPartial(d){const c=dayDoneCount(d);return c>0&&c<TASKS.length}
+const DNAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+function dayName(d){return DNAMES[(MAY_START_DOW+d-1)%7]}
+function renderCalendar(){
+  const grid=document.getElementById('dayGrid');grid.innerHTML='';
+  for(let i=0;i<MAY_START_DOW;i++){const e=document.createElement('div');e.className='day-cell empty';grid.appendChild(e)}
+  for(let d=1;d<=MAY_DAYS;d++){
+    const cell=document.createElement('div');
+    let cls='day-cell';
+    if(d===selectedDay)cls+=' active';
+    else if(isDayComplete(d))cls+=' full-done';
+    else if(isDayPartial(d))cls+=' partial';
+    cell.className=cls;
+    cell.innerHTML=`<span class="dn">${d}</span><span class="dp"></span>`;
+    cell.onclick=()=>selectDay(d);
+    grid.appendChild(cell);
+  }
+}
+function renderTasks(){
+  const area=document.getElementById('taskArea');
+  if(!selectedDay){area.innerHTML='';return}
+  const dd=getDayData(selectedDay);
+  const doneCount=TASKS.filter(t=>dd[t.id]).length;
+  document.getElementById('selDateLabel').textContent=`${dayName(selectedDay)}, May ${selectedDay}`;
+  document.getElementById('dayProgText').textContent=`${doneCount} / ${TASKS.length} done`;
+  let html='';
+  SECTIONS.forEach(sec=>{
+    html+=`<div class="sec">${sec.label}</div><div class="task-grid">`;
+    sec.ids.forEach(id=>{
+      const t=TASKS.find(x=>x.id===id);if(!t)return;
+      const done=!!dd[t.id];
+      html+=`<div class="task${done?' done':''}" data-cat="${t.cat}" onclick="toggleTask('${t.id}')">
+        <div class="checkbox"><span class="checkmark">&#10003;</span></div>
+        <div class="task-info">
+          <div class="task-time">${t.time}</div>
+          <div class="task-name">${t.name}</div>
+          <div class="task-dur">${t.dur}</div>
+        </div>
+        <div class="task-icon">${t.icon}</div>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  html+=`<button class="reset-btn" onclick="resetDay()">&#8634; Reset Day</button>`;
+  area.innerHTML=html;
+}
+function toggleTask(id){
+  if(!selectedDay)return;
+  const dd=getDayData(selectedDay);dd[id]=!dd[id];save();
+  const nowComplete=isDayComplete(selectedDay);
+  renderCalendar();renderTasks();updateStats();
+  if(nowComplete)showToast('&#128293; Day Complete!');
+  else if(dd[id])showToast('&#10003; Done!');
+}
+function resetDay(){if(!selectedDay)return;data[selectedDay]={};save();renderCalendar();renderTasks();updateStats()}
+function selectDay(d){selectedDay=d;renderCalendar();renderTasks();setTimeout(()=>document.getElementById('taskArea').scrollIntoView({behavior:'smooth',block:'start'}),50)}
+function updateStats(){
+  let totalDone=0,daysActive=0;
+  for(let d=1;d<=MAY_DAYS;d++){const c=dayDoneCount(d);totalDone+=c;if(c>0)daysActive++}
+  let streak=0;for(let d=MAY_DAYS;d>=1;d--){if(isDayComplete(d))streak++;else break}
+  document.getElementById('totalDone').textContent=totalDone;
+  document.getElementById('daysActive').textContent=daysActive;
+  document.getElementById('streak').textContent=streak;
+  const pct=Math.round((totalDone/(MAY_DAYS*TASKS.length))*100);
+  document.getElementById('progPct').textContent=pct+'%';
+  document.getElementById('progFill').style.width=pct+'%';
+}
+function showToast(msg){const t=document.getElementById('toast');t.innerHTML=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+load();
+const now=new Date();
+selectedDay=(now.getFullYear()===2026&&now.getMonth()===4)?now.getDate():1;
+renderCalendar();renderTasks();updateStats();
+</script>
+</body>
+</html>
