@@ -16,19 +16,45 @@
   body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
   body::after { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,255,71,0.06) 0%, transparent 70%); pointer-events: none; z-index: 0; }
   .wrap { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 36px 20px 100px; }
-  header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; flex-wrap: wrap; gap: 24px; }
-  .brand h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 12vw, 110px); line-height: 0.88; color: var(--accent); letter-spacing: 3px; }
+
+  /* TOKEN SETUP SCREEN */
+  .setup-screen { position: fixed; inset: 0; background: var(--bg); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .setup-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 40px; max-width: 480px; width: 100%; }
+  .setup-box h2 { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--accent); letter-spacing: 2px; margin-bottom: 8px; }
+  .setup-box p { font-size: 13px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+  .setup-box a { color: var(--accent2); }
+  .token-input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; outline: none; margin-bottom: 12px; transition: border 0.2s; }
+  .token-input:focus { border-color: var(--accent); }
+  .token-btn { width: 100%; background: var(--accent); color: #080808; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; border: none; border-radius: 10px; padding: 14px; cursor: pointer; transition: opacity 0.15s; }
+  .token-btn:hover { opacity: 0.85; }
+  .token-err { color: var(--accent3); font-size: 12px; font-family: 'DM Mono', monospace; margin-top: 8px; display: none; }
+
+  /* SYNC STATUS BAR */
+  .sync-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; padding: 10px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
+  .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex-shrink: 0; transition: background 0.3s; }
+  .sync-dot.syncing { background: var(--accent); animation: pulse 1s infinite; }
+  .sync-dot.synced { background: var(--done-border); }
+  .sync-dot.error { background: var(--accent3); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .sync-text { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); flex: 1; letter-spacing: 1px; }
+  .sync-refresh { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: all 0.15s; text-transform: uppercase; }
+  .sync-refresh:hover { border-color: var(--accent2); color: var(--accent2); }
+  .logout-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: all 0.15s; text-transform: uppercase; }
+  .logout-btn:hover { border-color: var(--accent3); color: var(--accent3); }
+
+  header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; flex-wrap: wrap; gap: 24px; }
+  .brand h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px, 10vw, 100px); line-height: 0.88; color: var(--accent); letter-spacing: 3px; }
   .brand p { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; }
-  .month-stats { display: flex; gap: 28px; padding-bottom: 8px; }
+  .month-stats { display: flex; gap: 24px; padding-bottom: 8px; }
   .stat { text-align: right; }
-  .stat-n { font-family: 'Bebas Neue', sans-serif; font-size: 42px; line-height: 1; display: block; }
+  .stat-n { font-family: 'Bebas Neue', sans-serif; font-size: 38px; line-height: 1; display: block; }
   .stat-n.s1 { color: var(--accent); } .stat-n.s2 { color: var(--accent2); } .stat-n.s3 { color: var(--accent4); }
   .stat-l { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
   .month-progress { margin-bottom: 36px; }
   .prog-label { display: flex; justify-content: space-between; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
   .prog-track { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
   .prog-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 99px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
-  .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .cal-header { display: flex; align-items: center; margin-bottom: 14px; }
   .cal-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; color: var(--text); }
   .weekday-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 4px; }
   .wd { text-align: center; font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; padding: 4px 0; }
@@ -79,7 +105,27 @@
 </style>
 </head>
 <body>
+
+<!-- SETUP SCREEN -->
+<div class="setup-screen" id="setupScreen">
+  <div class="setup-box">
+    <h2>Sync Setup</h2>
+    <p>Enter your GitHub Personal Access Token to sync data across all your devices. Your token is stored only in this browser and only used to save/load your routine data.<br><br>
+    Create one at <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a> with <strong>repo</strong> scope selected.</p>
+    <input class="token-input" id="tokenInput" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+    <button class="token-btn" onclick="saveToken()">Connect &amp; Sync</button>
+    <div class="token-err" id="tokenErr">Invalid token or no repo access. Please try again.</div>
+  </div>
+</div>
+
 <div class="wrap">
+  <div class="sync-bar">
+    <div class="sync-dot" id="syncDot"></div>
+    <span class="sync-text" id="syncText">Not connected</span>
+    <button class="sync-refresh" onclick="pullFromGitHub()">&#8635; Refresh</button>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
   <header>
     <div class="brand"><h1>APR-MAY<br>2026</h1><p>Daily Routine Tracker</p></div>
     <div class="month-stats">
@@ -88,24 +134,35 @@
       <div class="stat"><span class="stat-n s3" id="streak">0</span><div class="stat-l">Day Streak</div></div>
     </div>
   </header>
+
   <div class="month-progress">
     <div class="prog-label"><span>Month Progress</span><span id="progPct">0%</span></div>
     <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
   </div>
+
   <div class="cal-header"><div class="cal-title">APR 30 + MAY 2026</div></div>
   <div class="weekday-row">
     <div class="wd">Sun</div><div class="wd">Mon</div><div class="wd">Tue</div>
     <div class="wd">Wed</div><div class="wd">Thu</div><div class="wd">Fri</div><div class="wd">Sat</div>
   </div>
   <div class="day-grid" id="dayGrid"></div>
+
   <div class="date-panel">
     <div class="date-label">-- <span id="selDateLabel">Select a day</span></div>
     <div class="day-progress-text" id="dayProgText"></div>
   </div>
   <div id="taskArea"></div>
 </div>
+
 <div class="toast" id="toast"></div>
+
 <script>
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+const OWNER = 'SharadDevOps';
+const REPO  = 'may-routine-tracker';
+const DATA_PATH = 'data.json';
+const TOKEN_KEY = 'gh_routine_token';
+
 const TASKS=[
   {id:'skincare_am',time:'9:30 AM',name:'Morning Skincare',dur:'5 min x 3',icon:'&#129396;',cat:'wellness'},
   {id:'jaw_am',time:'9:30 AM',name:'Jawline Exercise',dur:'15 min',icon:'&#128170;',cat:'wellness'},
@@ -129,10 +186,100 @@ const SECTIONS=[
   {label:'Evening Fitness -- 6:00 PM',ids:['gym','walk']},
   {label:'Night -- 9:00 PM',ids:['skincare_pm','jaw_pm','interview','casestudy','mocktest']},
 ];
-const APR30_DOW=4,MAY_START_DOW=5,MAY_DAYS=31,STORAGE_KEY='may2026_routine_v3';
-let data={},selectedDay=null;
-function load(){try{data=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}')}catch{data={}}}
-function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}
+const APR30_DOW=4, MAY_START_DOW=5, MAY_DAYS=31;
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let data = {};
+let selectedDay = null;
+let ghToken = '';
+let dataSha = null; // SHA of data.json on GitHub (needed for updates)
+let saveTimer = null;
+
+// ── TOKEN SETUP ───────────────────────────────────────────────────────────────
+function saveToken() {
+  const t = document.getElementById('tokenInput').value.trim();
+  if (!t) return;
+  ghToken = t;
+  setSyncStatus('syncing', 'Verifying token...');
+  pullFromGitHub(true);
+}
+
+function logout() {
+  localStorage.removeItem(TOKEN_KEY);
+  ghToken = '';
+  data = {};
+  dataSha = null;
+  document.getElementById('setupScreen').style.display = 'flex';
+  setSyncStatus('', 'Not connected');
+  renderCalendar(); renderTasks(); updateStats();
+}
+
+// ── GITHUB API ────────────────────────────────────────────────────────────────
+async function pullFromGitHub(isSetup=false) {
+  setSyncStatus('syncing', 'Syncing...');
+  try {
+    const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${DATA_PATH}`, {
+      headers: { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github.v3+json' }
+    });
+    if (res.status === 401 || res.status === 403) {
+      document.getElementById('tokenErr').style.display = 'block';
+      setSyncStatus('error', 'Auth failed');
+      return;
+    }
+    if (res.status === 404) {
+      // data.json doesn't exist yet — start fresh
+      data = {};
+      dataSha = null;
+    } else {
+      const json = await res.json();
+      dataSha = json.sha;
+      data = JSON.parse(atob(json.content.replace(/\n/g,'')));
+    }
+    if (isSetup) {
+      localStorage.setItem(TOKEN_KEY, ghToken);
+      document.getElementById('setupScreen').style.display = 'none';
+      document.getElementById('tokenErr').style.display = 'none';
+    }
+    setSyncStatus('synced', 'Synced ' + new Date().toLocaleTimeString());
+    renderCalendar(); renderTasks(); updateStats();
+  } catch(e) {
+    setSyncStatus('error', 'Sync failed — check connection');
+  }
+}
+
+async function pushToGitHub() {
+  if (!ghToken) return;
+  setSyncStatus('syncing', 'Saving...');
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+  const body = { message: 'Update routine data', content };
+  if (dataSha) body.sha = dataSha;
+  try {
+    const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${DATA_PATH}`, {
+      method: 'PUT',
+      headers: { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error('Save failed');
+    const json = await res.json();
+    dataSha = json.content.sha;
+    setSyncStatus('synced', 'Saved ' + new Date().toLocaleTimeString());
+  } catch(e) {
+    setSyncStatus('error', 'Save failed — will retry');
+  }
+}
+
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(pushToGitHub, 1500); // debounce 1.5s
+}
+
+function setSyncStatus(state, msg) {
+  const dot = document.getElementById('syncDot');
+  dot.className = 'sync-dot' + (state ? ' ' + state : '');
+  document.getElementById('syncText').textContent = msg;
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
 function getDayData(d){if(!data[d])data[d]={};return data[d]}
 function dayDoneCount(d){const dd=data[d]||{};return TASKS.filter(t=>dd[t.id]).length}
 function isDayComplete(d){return dayDoneCount(d)===TASKS.length}
@@ -140,6 +287,8 @@ function isDayPartial(d){const c=dayDoneCount(d);return c>0&&c<TASKS.length}
 const DNAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 function dayName(d){if(d==='apr30')return 'Thursday';return DNAMES[(MAY_START_DOW+d-1)%7]}
 function dayLabel(d){if(d==='apr30')return 'Thursday, April 30';return `${dayName(d)}, May ${d}`}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
 function renderCalendar(){
   const grid=document.getElementById('dayGrid');grid.innerHTML='';
   for(let i=0;i<APR30_DOW;i++){const e=document.createElement('div');e.className='day-cell empty';grid.appendChild(e)}
@@ -164,6 +313,7 @@ function renderCalendar(){
     grid.appendChild(cell);
   }
 }
+
 function renderTasks(){
   const area=document.getElementById('taskArea');
   if(!selectedDay){area.innerHTML='';return}
@@ -192,16 +342,29 @@ function renderTasks(){
   html+='<button class="reset-btn" onclick="resetDay()">&#8634; Reset Day</button>';
   area.innerHTML=html;
 }
+
 function toggleTask(id){
   if(!selectedDay)return;
-  const dd=getDayData(selectedDay);dd[id]=!dd[id];save();
+  const dd=getDayData(selectedDay);dd[id]=!dd[id];
   const nowComplete=isDayComplete(selectedDay);
   renderCalendar();renderTasks();updateStats();
+  scheduleSave();
   if(nowComplete)showToast('Day Complete!');
   else if(dd[id])showToast('Done!');
 }
-function resetDay(){if(!selectedDay)return;data[selectedDay]={};save();renderCalendar();renderTasks();updateStats()}
-function selectDay(d){selectedDay=d;renderCalendar();renderTasks();setTimeout(()=>document.getElementById('taskArea').scrollIntoView({behavior:'smooth',block:'start'}),50)}
+
+function resetDay(){
+  if(!selectedDay)return;
+  data[selectedDay]={};
+  renderCalendar();renderTasks();updateStats();
+  scheduleSave();
+}
+
+function selectDay(d){
+  selectedDay=d;renderCalendar();renderTasks();
+  setTimeout(()=>document.getElementById('taskArea').scrollIntoView({behavior:'smooth',block:'start'}),50);
+}
+
 function updateStats(){
   let totalDone=0,daysActive=0;
   const allDays=['apr30',...Array.from({length:MAY_DAYS},(_,i)=>i+1)];
@@ -216,13 +379,25 @@ function updateStats(){
   document.getElementById('progPct').textContent=pct+'%';
   document.getElementById('progFill').style.width=pct+'%';
 }
+
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
-load();
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
 const now=new Date();
-if(now.getFullYear()===2026&&now.getMonth()===3&&now.getDate()===30){selectedDay='apr30';}
-else if(now.getFullYear()===2026&&now.getMonth()===4){selectedDay=now.getDate();}
-else{selectedDay='apr30';}
-renderCalendar();renderTasks();updateStats();
+if(now.getFullYear()===2026&&now.getMonth()===3&&now.getDate()===30) selectedDay='apr30';
+else if(now.getFullYear()===2026&&now.getMonth()===4) selectedDay=now.getDate();
+else selectedDay=1;
+
+renderCalendar(); renderTasks(); updateStats();
+
+const savedToken = localStorage.getItem(TOKEN_KEY);
+if (savedToken) {
+  ghToken = savedToken;
+  document.getElementById('setupScreen').style.display = 'none';
+  pullFromGitHub();
+} else {
+  document.getElementById('setupScreen').style.display = 'flex';
+}
 </script>
 </body>
 </html>
