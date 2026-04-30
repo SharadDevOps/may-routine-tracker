@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>May 2026 — Daily Routine</title>
+<title>Apr 30 - May 2026 Daily Routine</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -81,7 +81,7 @@
 <body>
 <div class="wrap">
   <header>
-    <div class="brand"><h1>MAY<br>2026</h1><p>Daily Routine Tracker</p></div>
+    <div class="brand"><h1>APR-MAY<br>2026</h1><p>Daily Routine Tracker</p></div>
     <div class="month-stats">
       <div class="stat"><span class="stat-n s1" id="totalDone">0</span><div class="stat-l">Tasks Done</div></div>
       <div class="stat"><span class="stat-n s2" id="daysActive">0</span><div class="stat-l">Days Active</div></div>
@@ -92,14 +92,14 @@
     <div class="prog-label"><span>Month Progress</span><span id="progPct">0%</span></div>
     <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
   </div>
-  <div class="cal-header"><div class="cal-title">MAY 2026</div></div>
+  <div class="cal-header"><div class="cal-title">APR 30 + MAY 2026</div></div>
   <div class="weekday-row">
     <div class="wd">Sun</div><div class="wd">Mon</div><div class="wd">Tue</div>
     <div class="wd">Wed</div><div class="wd">Thu</div><div class="wd">Fri</div><div class="wd">Sat</div>
   </div>
   <div class="day-grid" id="dayGrid"></div>
   <div class="date-panel">
-    <div class="date-label">&#8212; <span id="selDateLabel">Select a day</span></div>
+    <div class="date-label">-- <span id="selDateLabel">Select a day</span></div>
     <div class="day-progress-text" id="dayProgText"></div>
   </div>
   <div id="taskArea"></div>
@@ -109,11 +109,11 @@
 const TASKS=[
   {id:'skincare_am',time:'9:30 AM',name:'Morning Skincare',dur:'5 min x 3',icon:'&#129396;',cat:'wellness'},
   {id:'jaw_am',time:'9:30 AM',name:'Jawline Exercise',dur:'15 min',icon:'&#128170;',cat:'wellness'},
-  {id:'japanese',time:'9:45 AM',name:'Japanese Study',dur:'30 min',icon:'&#127471;&#127477;',cat:'language'},
+  {id:'japanese',time:'9:45 AM',name:'Japanese Study',dur:'30 min',icon:'JP',cat:'language'},
   {id:'kubernetes',time:'10:15 AM',name:'Kubernetes',dur:'1.5 hr',icon:'&#9784;',cat:'study'},
   {id:'terraform',time:'11:45 AM',name:'Terraform',dur:'30 min',icon:'&#127959;',cat:'study'},
   {id:'azure',time:'12:15 PM',name:'Azure',dur:'1 hr',icon:'&#9729;',cat:'study'},
-  {id:'bath',time:'1:15 PM',name:'Daily Bath',dur:'&mdash;',icon:'&#128703;',cat:'hygiene'},
+  {id:'bath',time:'1:15 PM',name:'Daily Bath',dur:'--',icon:'&#128703;',cat:'hygiene'},
   {id:'gym',time:'6:00 PM',name:'Gym',dur:'1 hr',icon:'&#127947;',cat:'fitness'},
   {id:'walk',time:'7:00 PM',name:'Evening Walk',dur:'30 min',icon:'&#128694;',cat:'fitness'},
   {id:'skincare_pm',time:'9:00 PM',name:'Night Skincare',dur:'5 min x 3',icon:'&#127769;',cat:'wellness'},
@@ -123,13 +123,13 @@ const TASKS=[
   {id:'mocktest',time:'11:15 PM',name:'Mock Test',dur:'1 hr',icon:'&#128221;',cat:'interview'},
 ];
 const SECTIONS=[
-  {label:'Morning &mdash; 9:30 AM',ids:['skincare_am','jaw_am','japanese']},
-  {label:'Study Block &mdash; 10:15 AM',ids:['kubernetes','terraform','azure']},
-  {label:'Afternoon &mdash; 1:15 PM',ids:['bath']},
-  {label:'Evening Fitness &mdash; 6:00 PM',ids:['gym','walk']},
-  {label:'Night &mdash; 9:00 PM',ids:['skincare_pm','jaw_pm','interview','casestudy','mocktest']},
+  {label:'Morning -- 9:30 AM',ids:['skincare_am','jaw_am','japanese']},
+  {label:'Study Block -- 10:15 AM',ids:['kubernetes','terraform','azure']},
+  {label:'Afternoon -- 1:15 PM',ids:['bath']},
+  {label:'Evening Fitness -- 6:00 PM',ids:['gym','walk']},
+  {label:'Night -- 9:00 PM',ids:['skincare_pm','jaw_pm','interview','casestudy','mocktest']},
 ];
-const MAY_START_DOW=5,MAY_DAYS=31,STORAGE_KEY='may2026_routine_v2';
+const APR30_DOW=4,MAY_START_DOW=5,MAY_DAYS=31,STORAGE_KEY='may2026_routine_v3';
 let data={},selectedDay=null;
 function load(){try{data=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}')}catch{data={}}}
 function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}
@@ -138,10 +138,20 @@ function dayDoneCount(d){const dd=data[d]||{};return TASKS.filter(t=>dd[t.id]).l
 function isDayComplete(d){return dayDoneCount(d)===TASKS.length}
 function isDayPartial(d){const c=dayDoneCount(d);return c>0&&c<TASKS.length}
 const DNAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-function dayName(d){return DNAMES[(MAY_START_DOW+d-1)%7]}
+function dayName(d){if(d==='apr30')return 'Thursday';return DNAMES[(MAY_START_DOW+d-1)%7]}
+function dayLabel(d){if(d==='apr30')return 'Thursday, April 30';return `${dayName(d)}, May ${d}`}
 function renderCalendar(){
   const grid=document.getElementById('dayGrid');grid.innerHTML='';
-  for(let i=0;i<MAY_START_DOW;i++){const e=document.createElement('div');e.className='day-cell empty';grid.appendChild(e)}
+  for(let i=0;i<APR30_DOW;i++){const e=document.createElement('div');e.className='day-cell empty';grid.appendChild(e)}
+  const apr=document.createElement('div');
+  let aprCls='day-cell';
+  if(selectedDay==='apr30')aprCls+=' active';
+  else if(isDayComplete('apr30'))aprCls+=' full-done';
+  else if(isDayPartial('apr30'))aprCls+=' partial';
+  apr.className=aprCls;
+  apr.innerHTML='<span class="dn" style="font-size:clamp(9px,1.5vw,12px)">APR</span><span class="dn">30</span><span class="dp"></span>';
+  apr.onclick=()=>selectDay('apr30');
+  grid.appendChild(apr);
   for(let d=1;d<=MAY_DAYS;d++){
     const cell=document.createElement('div');
     let cls='day-cell';
@@ -159,7 +169,7 @@ function renderTasks(){
   if(!selectedDay){area.innerHTML='';return}
   const dd=getDayData(selectedDay);
   const doneCount=TASKS.filter(t=>dd[t.id]).length;
-  document.getElementById('selDateLabel').textContent=`${dayName(selectedDay)}, May ${selectedDay}`;
+  document.getElementById('selDateLabel').textContent=dayLabel(selectedDay);
   document.getElementById('dayProgText').textContent=`${doneCount} / ${TASKS.length} done`;
   let html='';
   SECTIONS.forEach(sec=>{
@@ -179,7 +189,7 @@ function renderTasks(){
     });
     html+='</div>';
   });
-  html+=`<button class="reset-btn" onclick="resetDay()">&#8634; Reset Day</button>`;
+  html+='<button class="reset-btn" onclick="resetDay()">&#8634; Reset Day</button>';
   area.innerHTML=html;
 }
 function toggleTask(id){
@@ -187,26 +197,31 @@ function toggleTask(id){
   const dd=getDayData(selectedDay);dd[id]=!dd[id];save();
   const nowComplete=isDayComplete(selectedDay);
   renderCalendar();renderTasks();updateStats();
-  if(nowComplete)showToast('&#128293; Day Complete!');
-  else if(dd[id])showToast('&#10003; Done!');
+  if(nowComplete)showToast('Day Complete!');
+  else if(dd[id])showToast('Done!');
 }
 function resetDay(){if(!selectedDay)return;data[selectedDay]={};save();renderCalendar();renderTasks();updateStats()}
 function selectDay(d){selectedDay=d;renderCalendar();renderTasks();setTimeout(()=>document.getElementById('taskArea').scrollIntoView({behavior:'smooth',block:'start'}),50)}
 function updateStats(){
   let totalDone=0,daysActive=0;
-  for(let d=1;d<=MAY_DAYS;d++){const c=dayDoneCount(d);totalDone+=c;if(c>0)daysActive++}
-  let streak=0;for(let d=MAY_DAYS;d>=1;d--){if(isDayComplete(d))streak++;else break}
+  const allDays=['apr30',...Array.from({length:MAY_DAYS},(_,i)=>i+1)];
+  for(const d of allDays){const c=dayDoneCount(d);totalDone+=c;if(c>0)daysActive++}
+  let streak=0;
+  for(let d=MAY_DAYS;d>=1;d--){if(isDayComplete(d))streak++;else break}
+  if(streak===MAY_DAYS&&isDayComplete('apr30'))streak++;
   document.getElementById('totalDone').textContent=totalDone;
   document.getElementById('daysActive').textContent=daysActive;
   document.getElementById('streak').textContent=streak;
-  const pct=Math.round((totalDone/(MAY_DAYS*TASKS.length))*100);
+  const pct=Math.round((totalDone/((MAY_DAYS+1)*TASKS.length))*100);
   document.getElementById('progPct').textContent=pct+'%';
   document.getElementById('progFill').style.width=pct+'%';
 }
-function showToast(msg){const t=document.getElementById('toast');t.innerHTML=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
 load();
 const now=new Date();
-selectedDay=(now.getFullYear()===2026&&now.getMonth()===4)?now.getDate():1;
+if(now.getFullYear()===2026&&now.getMonth()===3&&now.getDate()===30){selectedDay='apr30';}
+else if(now.getFullYear()===2026&&now.getMonth()===4){selectedDay=now.getDate();}
+else{selectedDay='apr30';}
 renderCalendar();renderTasks();updateStats();
 </script>
 </body>
