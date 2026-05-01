@@ -1,5 +1,8 @@
 {
-  "1": {},
+  "1": {
+    "skincare_am": true,
+    "jaw_am": true
+  },
   "apr30": {
     "skincare_am": true,
     "jaw_am": true,
