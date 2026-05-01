@@ -5,7 +5,8 @@
     "japanese": true,
     "bath": true,
     "terraform": true,
-    "gym": true
+    "gym": true,
+    "walk": true
   },
   "apr30": {
     "skincare_am": true,
