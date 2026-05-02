@@ -8,6 +8,10 @@
     "gym": true,
     "walk": true
   },
+  "2": {
+    "skincare_am": true,
+    "jaw_am": true
+  },
   "apr30": {
     "skincare_am": true,
     "jaw_am": true,
