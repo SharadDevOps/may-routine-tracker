@@ -23,7 +23,10 @@
     "jaw_am": true,
     "japanese": true,
     "terraform": true,
-    "bath": true
+    "bath": true,
+    "walk": true,
+    "skincare_pm": true,
+    "jaw_pm": true
   },
   "4": {},
   "apr30": {
