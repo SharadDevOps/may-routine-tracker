@@ -21,7 +21,9 @@
   "3": {
     "skincare_am": true,
     "jaw_am": true,
-    "japanese": true
+    "japanese": true,
+    "terraform": true,
+    "bath": true
   },
   "4": {},
   "apr30": {
