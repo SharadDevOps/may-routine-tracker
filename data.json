@@ -18,6 +18,11 @@
     "terraform": true,
     "walk": true
   },
+  "3": {
+    "skincare_am": true,
+    "jaw_am": true,
+    "japanese": true
+  },
   "4": {},
   "apr30": {
     "skincare_am": true,
