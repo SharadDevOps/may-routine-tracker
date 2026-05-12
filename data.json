@@ -39,7 +39,9 @@
     "japanese": true,
     "kubernetes": true,
     "terraform": true,
-    "azure": true
+    "azure": true,
+    "bath": true,
+    "gym": false
   },
   "apr30": {
     "skincare_am": true,
