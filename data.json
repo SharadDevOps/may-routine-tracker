@@ -39,7 +39,7 @@
     "japanese": true,
     "kubernetes": true,
     "terraform": true,
-    "azure": true,
+    "azure": false,
     "bath": true,
     "gym": false
   },
