@@ -33,6 +33,14 @@
     "jaw_am": true,
     "japanese": true
   },
+  "12": {
+    "skincare_am": true,
+    "jaw_am": true,
+    "japanese": true,
+    "kubernetes": true,
+    "terraform": true,
+    "azure": true
+  },
   "apr30": {
     "skincare_am": true,
     "jaw_am": true,
